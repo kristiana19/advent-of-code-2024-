@@ -1,9 +1,8 @@
 import java.util.*;
 
-public class RedNosedReports {
+public class RedNosedReports2 {
     public static void main(String[] args) {
         
-        // Ustvarimo Scanner za vnos uporabnika
         Scanner scanner = new Scanner(System.in);
 
         // Pojasnilo za uporabnika
@@ -12,7 +11,7 @@ public class RedNosedReports {
         int steviloVarnih = 0;
 
         while (true) {
-            // Branje vrstice od uporabnika
+            
             String izvestaj = scanner.nextLine();
 
             // Preverimo, če je vnos 'konec', če je, končamo z vnosom
@@ -20,8 +19,8 @@ public class RedNosedReports {
                 break;
             }
 
-            // Preverimo, ali je izvestaj varen
-            if (jeVaren(izvestaj)) {
+            // Preverimo, ali je izvestaj varen z upoštevanjem Problem Dampenerja
+            if (jeVarenZProblemDampenerjem(izvestaj)) {
                 steviloVarnih++;
             }
         }
@@ -32,6 +31,43 @@ public class RedNosedReports {
         scanner.close();
     }
 
+    // Preverimo, ali je izvestaj varen 
+    public static boolean jeVarenZProblemDampenerjem(String izvestaj) {
+        // Razdelimo vhodni string na posamezne številke
+        String[] nivojiNizi = izvestaj.split(" ");
+        int[] nivoji = new int[nivojiNizi.length];
+
+        // Pretvorimo niz v celoštevilski array
+        for (int i = 0; i < nivojiNizi.length; i++) {
+            nivoji[i] = Integer.parseInt(nivojiNizi[i]);
+        }
+
+        // Preverimo, ali je poročilo že varno brez odstranjevanja
+        if (jeVaren(izvestaj)) {
+            return true;
+        }
+
+        // Če poročilo ni varno, preverimo, ali ga lahko popravimo z odstranitvijo ene ravni
+        for (int i = 0; i < nivoji.length; i++) {
+            // Ustvarimo nov niz brez i-te ravni
+            StringBuilder sb = new StringBuilder();
+            for (int j = 0; j < nivoji.length; j++) {
+                if (j != i) {
+                    sb.append(nivoji[j]).append(" ");
+                }
+            }
+
+            // Preverimo, če je poročilo varno po odstranitvi ravni
+            if (jeVaren(sb.toString().trim())) {
+                return true;
+            }
+        }
+
+        // Če nobena odstranitev ravni ne pomaga, poročilo ni varno
+        return false;
+    }
+
+    // Preverimo, ali je izvestaj varen (brez odstranjevanja)
     public static boolean jeVaren(String izvestaj) {
         // Razdelimo vhodni string na posamezne številke
         String[] nivojiNizi = izvestaj.split(" ");
