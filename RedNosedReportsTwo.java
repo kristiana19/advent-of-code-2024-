@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class RedNosedReports2 {
+public class RedNosedReportsTwo {
     public static void main(String[] args) {
         
         Scanner scanner = new Scanner(System.in);
