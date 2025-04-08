@@ -27,10 +27,9 @@ To run any day's solution, follow these steps in your terminal:
    cd Day4
    
 2. Compile the Java source file:
-      
-  javac CeresSearch.java
-
-   
+     ```bash
+   javac CeresSearch.java
+     
 4. Run the program:
-
-  java CeresSearch
+   ```bash
+   java CeresSearch
