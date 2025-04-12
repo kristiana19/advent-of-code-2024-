@@ -13,7 +13,7 @@ Each day is stored in its own folder (e.g., `Day1`, `Day2`, ...), and contains:
 
 - One or more `.java` files with solutions
 - An input file (`input.txt` or similarly named)
-- Optional compiled `.class` files (ignored via `.gitignore`)
+- Optional compiled `.class` files
 
 Example:
 ---
