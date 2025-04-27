@@ -3,65 +3,65 @@ import java.util.*;
 public class RedNosedReports {
     public static void main(String[] args) {
         
-        // Ustvarimo Scanner za vnos uporabnika
+        // Create a Scanner for user input
         Scanner scanner = new Scanner(System.in);
 
-        // Pojasnilo za uporabnika
-        System.out.println("Vnesite številke v eni vrstici (ločene s presledki), za konec vnesite 'konec'.");
+        // Instructions for the user
+        System.out.println("Enter numbers in one line (separated by spaces), type 'konec' to finish.");
 
-        int steviloVarnih = 0;
+        int safeReportsCount = 0;
 
         while (true) {
-            // Branje vrstice od uporabnika
-            String izvestaj = scanner.nextLine();
+            // Read a line from the user
+            String report = scanner.nextLine();
 
-            // Preverimo, če je vnos 'konec', če je, končamo z vnosom
-            if (izvestaj.equalsIgnoreCase("konec")) {
+            // Check if the input is 'konec', if yes, break the loop
+            if (report.equalsIgnoreCase("konec")) {
                 break;
             }
 
-            // Preverimo, ali je izvestaj varen
-            if (jeVaren(izvestaj)) {
-                steviloVarnih++;
+            // Check if the report is safe
+            if (isSafe(report)) {
+                safeReportsCount++;
             }
         }
 
-        // Ispis števila varnih izvestajev
-        System.out.println("Število varnih izvestajev je: " + steviloVarnih);
+        // Output the number of safe reports
+        System.out.println("The number of safe reports is: " + safeReportsCount);
         
         scanner.close();
     }
 
-    public static boolean jeVaren(String izvestaj) {
-        // Razdelimo vhodni string na posamezne številke
-        String[] nivojiNizi = izvestaj.split(" ");
-        int[] nivoji = new int[nivojiNizi.length];
+    public static boolean isSafe(String report) {
+        // Split the input string into individual numbers
+        String[] levelStrings = report.split(" ");
+        int[] levels = new int[levelStrings.length];
 
-        // Pretvorimo niz v celoštevilski array
-        for (int i = 0; i < nivojiNizi.length; i++) {
-            nivoji[i] = Integer.parseInt(nivojiNizi[i]);
+        // Convert the string array into an integer array
+        for (int i = 0; i < levelStrings.length; i++) {
+            levels[i] = Integer.parseInt(levelStrings[i]);
         }
 
-        boolean narasca = true;
-        boolean pada = true;
+        boolean ascending = true;
+        boolean descending = true;
 
-        for (int i = 1; i < nivoji.length; i++) {
-            int razlika = nivoji[i] - nivoji[i - 1];
+        for (int i = 1; i < levels.length; i++) {
+            int difference = levels[i] - levels[i - 1];
 
-            // Preverimo, če je razlika znotraj dovoljenega obsega (-3 do 3)
-            if (Math.abs(razlika) < 1 || Math.abs(razlika) > 3) {
+            // Check if the difference is within the allowed range (-3 to 3)
+            if (Math.abs(difference) < 1 || Math.abs(difference) > 3) {
                 return false;
             }
 
-            // Preverimo, ali nivoji naraščajo ali padajo
-            if (razlika > 0) {
-                pada = false;
-            } else if (razlika < 0) {
-                narasca = false;
+            // Check whether the levels are strictly ascending or descending
+            if (difference > 0) {
+                descending = false;
+            } else if (difference < 0) {
+                ascending = false;
             }
         }
 
-        // Varen, če nivoji vsi naraščajo ali vsi padajo
-        return pada || narasca;
+        // The report is safe if all levels are ascending or all are descending
+        return descending || ascending;
     }
 }

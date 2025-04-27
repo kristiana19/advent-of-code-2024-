@@ -5,99 +5,99 @@ public class RedNosedReportsTwo {
         
         Scanner scanner = new Scanner(System.in);
 
-        // Pojasnilo za uporabnika
-        System.out.println("Vnesite številke v eni vrstici (ločene s presledki), za konec vnesite 'konec'.");
+        // Instructions for the user
+        System.out.println("Enter numbers in one line (separated by spaces), type 'konec' to finish.");
 
-        int steviloVarnih = 0;
+        int safeReportsCount = 0;
 
         while (true) {
             
-            String izvestaj = scanner.nextLine();
+            String report = scanner.nextLine();
 
-            // Preverimo, če je vnos 'konec', če je, končamo z vnosom
-            if (izvestaj.equalsIgnoreCase("konec")) {
+            // Check if the input is 'konec', if yes, break the loop
+            if (report.equalsIgnoreCase("konec")) {
                 break;
             }
 
-            // Preverimo, ali je izvestaj varen z upoštevanjem Problem Dampenerja
-            if (jeVarenZProblemDampenerjem(izvestaj)) {
-                steviloVarnih++;
+            // Check if the report is safe considering the Problem Dampener
+            if (isSafeWithProblemDampener(report)) {
+                safeReportsCount++;
             }
         }
 
-        // Ispis števila varnih izvestajev
-        System.out.println("Število varnih izvestajev je: " + steviloVarnih);
+        // Output the number of safe reports
+        System.out.println("The number of safe reports is: " + safeReportsCount);
         
         scanner.close();
     }
 
-    // Preverimo, ali je izvestaj varen 
-    public static boolean jeVarenZProblemDampenerjem(String izvestaj) {
-        // Razdelimo vhodni string na posamezne številke
-        String[] nivojiNizi = izvestaj.split(" ");
-        int[] nivoji = new int[nivojiNizi.length];
+    // Check if the report is safe
+    public static boolean isSafeWithProblemDampener(String report) {
+        // Split the input string into individual numbers
+        String[] levelStrings = report.split(" ");
+        int[] levels = new int[levelStrings.length];
 
-        // Pretvorimo niz v celoštevilski array
-        for (int i = 0; i < nivojiNizi.length; i++) {
-            nivoji[i] = Integer.parseInt(nivojiNizi[i]);
+        // Convert the string array into an integer array
+        for (int i = 0; i < levelStrings.length; i++) {
+            levels[i] = Integer.parseInt(levelStrings[i]);
         }
 
-        // Preverimo, ali je poročilo že varno brez odstranjevanja
-        if (jeVaren(izvestaj)) {
+        // Check if the report is already safe without removing any levels
+        if (isSafe(report)) {
             return true;
         }
 
-        // Če poročilo ni varno, preverimo, ali ga lahko popravimo z odstranitvijo ene ravni
-        for (int i = 0; i < nivoji.length; i++) {
-            // Ustvarimo nov niz brez i-te ravni
+        // If the report is not safe, check if it can be made safe by removing one level
+        for (int i = 0; i < levels.length; i++) {
+            // Create a new string without the i-th level
             StringBuilder sb = new StringBuilder();
-            for (int j = 0; j < nivoji.length; j++) {
+            for (int j = 0; j < levels.length; j++) {
                 if (j != i) {
-                    sb.append(nivoji[j]).append(" ");
+                    sb.append(levels[j]).append(" ");
                 }
             }
 
-            // Preverimo, če je poročilo varno po odstranitvi ravni
-            if (jeVaren(sb.toString().trim())) {
+            // Check if the report is safe after removing the level
+            if (isSafe(sb.toString().trim())) {
                 return true;
             }
         }
 
-        // Če nobena odstranitev ravni ne pomaga, poročilo ni varno
+        // If removing any level doesn't help, the report is not safe
         return false;
     }
 
-    // Preverimo, ali je izvestaj varen (brez odstranjevanja)
-    public static boolean jeVaren(String izvestaj) {
-        // Razdelimo vhodni string na posamezne številke
-        String[] nivojiNizi = izvestaj.split(" ");
-        int[] nivoji = new int[nivojiNizi.length];
+    // Check if the report is safe (without removing any levels)
+    public static boolean isSafe(String report) {
+        // Split the input string into individual numbers
+        String[] levelStrings = report.split(" ");
+        int[] levels = new int[levelStrings.length];
 
-        // Pretvorimo niz v celoštevilski array
-        for (int i = 0; i < nivojiNizi.length; i++) {
-            nivoji[i] = Integer.parseInt(nivojiNizi[i]);
+        // Convert the string array into an integer array
+        for (int i = 0; i < levelStrings.length; i++) {
+            levels[i] = Integer.parseInt(levelStrings[i]);
         }
 
-        boolean narasca = true;
-        boolean pada = true;
+        boolean ascending = true;
+        boolean descending = true;
 
-        for (int i = 1; i < nivoji.length; i++) {
-            int razlika = nivoji[i] - nivoji[i - 1];
+        for (int i = 1; i < levels.length; i++) {
+            int difference = levels[i] - levels[i - 1];
 
-            // Preverimo, če je razlika znotraj dovoljenega obsega (-3 do 3)
-            if (Math.abs(razlika) < 1 || Math.abs(razlika) > 3) {
+            // Check if the difference is within the allowed range (-3 to 3)
+            if (Math.abs(difference) < 1 || Math.abs(difference) > 3) {
                 return false;
             }
 
-            // Preverimo, ali nivoji naraščajo ali padajo
-            if (razlika > 0) {
-                pada = false;
-            } else if (razlika < 0) {
-                narasca = false;
+            // Check whether the levels are strictly ascending or descending
+            if (difference > 0) {
+                descending = false;
+            } else if (difference < 0) {
+                ascending = false;
             }
         }
 
-        // Varen, če nivoji vsi naraščajo ali vsi padajo
-        return pada || narasca;
+        // The report is safe if all levels are ascending or all are descending
+        return descending || ascending;
     }
 }
