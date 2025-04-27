@@ -4,83 +4,83 @@ import java.util.*;
 public class CeresSearch {
 
     public static void main(String[] args) {
-        // Pot do datoteke
-        String potDoDatoteke = "ceressearch.txt";
+        // Path to the file
+        String filePath = "ceressearch.txt";
 
-        // Preberemo vse vrstice iz datoteke
-        String[] mreza = preberiDatoteko(potDoDatoteke);
+        // Read all lines from the file
+        String[] grid = readFile(filePath);
 
-        // Beseda, ki jo iščemo
-        String beseda = "XMAS";
+        // Word to search for
+        String word = "XMAS";
 
-        // Iskanje besede v mreži
-        int steviloPojavitev = najdiBesedo(mreza, beseda);
+        // Search for the word in the grid
+        int occurrences = findWord(grid, word);
 
-        // Izpis števila pojavitve besede
-        System.out.println("Beseda '" + beseda + "' se pojavi " + steviloPojavitev + " krat.");
+        // Output the number of occurrences of the word
+        System.out.println("The word '" + word + "' appears " + occurrences + " times.");
     }
 
-    // Funkcija za branje vsebine datoteke
-    public static String[] preberiDatoteko(String potDoDatoteke) {
-        List<String> vrstice = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(potDoDatoteke))) {
-            String vrstica;
-            while ((vrstica = br.readLine()) != null) {
-                vrstice.add(vrstica);
+    // Function to read the contents of a file
+    public static String[] readFile(String filePath) {
+        List<String> lines = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                lines.add(line);
             }
         } catch (IOException e) {
-            System.out.println("Napaka pri branju datoteke: " + e.getMessage());
+            System.out.println("Error while reading the file: " + e.getMessage());
         }
-        // Vrnemo seznam vrstic kot polje nizov
-        return vrstice.toArray(new String[0]);
+        // Return the list of lines as an array of strings
+        return lines.toArray(new String[0]);
     }
 
-    // Funkcija za iskanje besede v mreži
-    public static int najdiBesedo(String[] mreza, String beseda) {
-        int steviloPojavitev = 0;
-        int steviloVrstic = mreza.length;
-        int steviloStolpcev = mreza[0].length();
+    // Function to search for the word in the grid
+    public static int findWord(String[] grid, String word) {
+        int occurrences = 0;
+        int numRows = grid.length;
+        int numCols = grid[0].length();
 
-        // Poglej vse možne smeri (horizontalno, vertikalno, diagonalno)
-        for (int vrstica = 0; vrstica < steviloVrstic; vrstica++) {
-            for (int stolpec = 0; stolpec < steviloStolpcev; stolpec++) {
-                // Poišči besedo v vseh smereh
-                steviloPojavitev += preveriSmer(mreza, vrstica, stolpec, 1, 0, beseda);  // Vodoravno desno
-                steviloPojavitev += preveriSmer(mreza, vrstica, stolpec, 0, 1, beseda);  // Navpično dol
-                steviloPojavitev += preveriSmer(mreza, vrstica, stolpec, 1, 1, beseda);  // Diagonalno desno dol
-                steviloPojavitev += preveriSmer(mreza, vrstica, stolpec, 1, -1, beseda); // Diagonalno desno gor
-                steviloPojavitev += preveriSmer(mreza, vrstica, stolpec, -1, 0, beseda); // Vodoravno levo
-                steviloPojavitev += preveriSmer(mreza, vrstica, stolpec, 0, -1, beseda); // Navpično gor
-                steviloPojavitev += preveriSmer(mreza, vrstica, stolpec, -1, -1, beseda); // Diagonalno levo dol
-                steviloPojavitev += preveriSmer(mreza, vrstica, stolpec, -1, 1, beseda); // Diagonalno levo gor
+        // Check all possible directions (horizontal, vertical, diagonal)
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
+                // Search for the word in all directions
+                occurrences += checkDirection(grid, row, col, 1, 0, word);  // Horizontally right
+                occurrences += checkDirection(grid, row, col, 0, 1, word);  // Vertically down
+                occurrences += checkDirection(grid, row, col, 1, 1, word);  // Diagonally right down
+                occurrences += checkDirection(grid, row, col, 1, -1, word); // Diagonally right up
+                occurrences += checkDirection(grid, row, col, -1, 0, word); // Horizontally left
+                occurrences += checkDirection(grid, row, col, 0, -1, word); // Vertically up
+                occurrences += checkDirection(grid, row, col, -1, -1, word); // Diagonally left up
+                occurrences += checkDirection(grid, row, col, -1, 1, word); // Diagonally left down
             }
         }
-        return steviloPojavitev;
+        return occurrences;
     }
 
-    // Preveri, ali beseda obstaja v določeni smeri
-    public static int preveriSmer(String[] mreza, int vrstica, int stolpec, int dVrstica, int dStolpec, String beseda) {
-        int dolzinaBesede = beseda.length();
-        int steviloVrstic = mreza.length;
-        int steviloStolpcev = mreza[0].length();
+    // Check if the word exists in a given direction
+    public static int checkDirection(String[] grid, int row, int col, int dRow, int dCol, String word) {
+        int wordLength = word.length();
+        int numRows = grid.length;
+        int numCols = grid[0].length();
 
-        // Preveri, ali beseda fit v mrežo v tej smeri
-        for (int i = 0; i < dolzinaBesede; i++) {
-            int novaVrstica = vrstica + i * dVrstica;
-            int novStolpec = stolpec + i * dStolpec;
+        // Check if the word fits in the grid in this direction
+        for (int i = 0; i < wordLength; i++) {
+            int newRow = row + i * dRow;
+            int newCol = col + i * dCol;
 
-            // Preveri, ali je znotraj meja mreže
-            if (novaVrstica < 0 || novaVrstica >= steviloVrstic || novStolpec < 0 || novStolpec >= steviloStolpcev) {
-                return 0; // Beseda ne obstaja v tej smeri
+            // Check if inside the bounds of the grid
+            if (newRow < 0 || newRow >= numRows || newCol < 0 || newCol >= numCols) {
+                return 0; // The word does not exist in this direction
             }
 
-            // Preveri, ali se črka ujema
-            if (mreza[novaVrstica].charAt(novStolpec) != beseda.charAt(i)) {
-                return 0; // Beseda se ne ujema
+            // Check if the character matches
+            if (grid[newRow].charAt(newCol) != word.charAt(i)) {
+                return 0; // The word does not match
             }
         }
 
-        // Če je vse v redu, smo našli besedo
+        // If everything matches, we found the word
         return 1;
     }
 }
