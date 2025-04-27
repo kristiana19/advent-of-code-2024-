@@ -5,53 +5,53 @@ import java.util.List;
 
 public class MullItOver {
     public static void main(String[] args) {
-        // Pot do datoteke
-        String potDatoteke = "input.txt"; 
+        // Path to the file
+        String filePath = "input.txt"; 
 
         try {
-            // Branje niza iz datoteke
-            String pokvarjeniNiz = preberiDatoteko(potDatoteke);
+            // Read the string from the file
+            String brokenString = readFile(filePath);
 
-            // Ekstrakcija vseh izrazov "mul(x, y)"
-            List<Integer> rezultati = izvleciInIzracunaj(pokvarjeniNiz);
+            // Extract all "mul(x, y)" expressions
+            List<Integer> results = extractAndCalculate(brokenString);
 
-            // Izračunavanje vsot za del 1 in del 2
-            int vsotaDel1 = rezultati.stream().reduce(0, Integer::sum); // Skupna vsota
-            int vsotaDel2 = rezultati.size(); // Število "mul" izrazov
+            // Calculate sums for part 1 and part 2
+            int sumPart1 = results.stream().reduce(0, Integer::sum); // Total sum
+            int sumPart2 = results.size(); // Number of "mul" expressions
 
-            // Izpis rezultatov
-            System.out.println("Rezultat za del 1: " + vsotaDel1);
-            System.out.println("Rezultat za del 2: " + vsotaDel2);
+            // Output the results
+            System.out.println("Result for part 1: " + sumPart1);
+            System.out.println("Result for part 2: " + sumPart2);
 
         } catch (IOException e) {
-            System.out.println("Pri branju datoteke je prišlo do napake: " + e.getMessage());
+            System.out.println("An error occurred while reading the file: " + e.getMessage());
         }
     }
 
-    // Funkcija za branje datoteke
-    private static String preberiDatoteko(String potDatoteke) throws IOException {
-        StringBuilder vsebina = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(potDatoteke))) {
-            String vrstica;
-            while ((vrstica = br.readLine()) != null) {
-                vsebina.append(vrstica);
+    // Function to read a file
+    private static String readFile(String filePath) throws IOException {
+        StringBuilder content = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                content.append(line);
             }
         }
-        return vsebina.toString();
+        return content.toString();
     }
 
-    // Funkcija za ekstrakcijo in izračunavanje izrazov "mul(x, y)"
-    private static List<Integer> izvleciInIzracunaj(String vhod) {
-        List<Integer> rezultati = new ArrayList<>();
-        Pattern vzorec = Pattern.compile("mul\\((\\d+),\\s*(\\d+)\\)");
-        Matcher ujemanje = vzorec.matcher(vhod);
+    // Function to extract and calculate "mul(x, y)" expressions
+    private static List<Integer> extractAndCalculate(String input) {
+        List<Integer> results = new ArrayList<>();
+        Pattern pattern = Pattern.compile("mul\\((\\d+),\\s*(\\d+)\\)");
+        Matcher matcher = pattern.matcher(input);
 
-        while (ujemanje.find()) {
-            int x = Integer.parseInt(ujemanje.group(1)); // Prvo število
-            int y = Integer.parseInt(ujemanje.group(2)); // Drugo število
-            rezultati.add(x * y); // Izračun in dodajanje rezultata v seznam
+        while (matcher.find()) {
+            int x = Integer.parseInt(matcher.group(1)); // First number
+            int y = Integer.parseInt(matcher.group(2)); // Second number
+            results.add(x * y); // Calculate and add the result to the list
         }
 
-        return rezultati;
+        return results;
     }
 }
