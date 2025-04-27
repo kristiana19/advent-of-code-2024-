@@ -5,38 +5,38 @@ public class HistorianHysteriaTwo {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        // Kreiranje seznamov
-        List<Integer> leviSeznam = new ArrayList<>();
-        List<Integer> desniSeznam = new ArrayList<>();
+        // Creating lists
+        List<Integer> leftList = new ArrayList<>();
+        List<Integer> rightList = new ArrayList<>();
 
-        // Vnos številk za levi in desni seznam
-        System.out.println("Vnesite številke za levi in desni seznam v dveh stolpcih (za konec vnesite 0 0):");
-        
+        // Input of numbers for the left and right lists
+        System.out.println("Enter numbers for the left and right lists in two columns (enter 0 0 to finish):");
+
         while (true) {
-            // Vnos dveh številk (eno za levi seznam, eno za desni seznam)
-            int levaStevilka = scanner.nextInt();
-            int desnaStevilka = scanner.nextInt();
+            // Input of two numbers (one for the left list, one for the right list)
+            int leftNumber = scanner.nextInt();
+            int rightNumber = scanner.nextInt();
 
-            // Prekine vnos, če sta obe številki 0
-            if (levaStevilka == 0 && desnaStevilka == 0) {
+            // Stop the input if both numbers are 0
+            if (leftNumber == 0 && rightNumber == 0) {
                 break;
             }
 
-            // Dodajanje številk v ustrezne sezname
-            leviSeznam.add(levaStevilka);
-            desniSeznam.add(desnaStevilka);
+            // Adding numbers to the appropriate lists
+            leftList.add(leftNumber);
+            rightList.add(rightNumber);
         }
 
-        // Izračunavanje podobnosti
-        int rezultatPodobnosti = 0;
-        for (Integer stevilka : leviSeznam) {
-            // Šteje kolikokrat se številka iz levega seznama pojavi v desnem seznamu
-            int steviloPojavitev = Collections.frequency(desniSeznam, stevilka);
-            rezultatPodobnosti += stevilka * steviloPojavitev;
+        // Calculating the similarity
+        int similarityResult = 0;
+        for (Integer number : leftList) {
+            // Counts how many times a number from the left list appears in the right list
+            int occurrenceCount = Collections.frequency(rightList, number);
+            similarityResult += number * occurrenceCount;
         }
 
-        // Ipisovanje rezultata
-        System.out.println("Skupna podobnost med seznamoma je: " + rezultatPodobnosti);
+        // Printing the result
+        System.out.println("The total similarity between the lists is: " + similarityResult);
 
         scanner.close();
     }

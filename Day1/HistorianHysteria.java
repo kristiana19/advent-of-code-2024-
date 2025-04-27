@@ -1,52 +1,52 @@
-import java.util.*; 
+import java.util.*;
 
 public class HistorianHysteria {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in); 
-                
-        // Kreiranje dinamičkih lista za unos elemenata
-        List<Integer> leviSeznam = new ArrayList<>(); // Lista za levi popis
-        List<Integer> desniSeznam = new ArrayList<>(); // Lista za desni popis
+        Scanner sc = new Scanner(System.in);
 
-        System.out.println("Unesite elemente u formatima: 'levi desni'. Za kraj unosa pritisnite Enter na praznom retku:");
-        
-        // Čitanje unosa red po red
-        while (sc.hasNextLine()) { // Provera da li postoji još redova za unos
-            String linija = sc.nextLine().trim(); // Čitanje trenutnog reda i uklanjanje praznih znakova sa krajeva
-            if (linija.isEmpty()) { // Ako je red prazan, prekida se unos
-                break; // Izlazak iz petlje
+        // Create dynamic lists for input elements
+        List<Integer> leftList = new ArrayList<>(); // List for the left collection
+        List<Integer> rightList = new ArrayList<>(); // List for the right collection
+
+        System.out.println("Enter elements in the format: 'left right'. To finish input, press Enter on an empty line:");
+
+        // Reading input line by line
+        while (sc.hasNextLine()) { // Check if there are more lines to read
+            String line = sc.nextLine().trim(); // Read the current line and remove whitespace from the ends
+            if (line.isEmpty()) { // If the line is empty, stop the input
+                break; // Exit the loop
             }
 
-            String[] brojevi = linija.split("\\s+"); // Razdvajanje reda na delove prema razmacima
-            if (brojevi.length == 2) { // Provera da li postoje tačno dva broja u redu
-                leviSeznam.add(Integer.parseInt(brojevi[0])); // Dodavanje prvog broja u levi popis
-                desniSeznam.add(Integer.parseInt(brojevi[1])); // Dodavanje drugog broja u desni popis
-            } else { // Ako red ne sadrži tačno dva broja, prikazuje se poruka o grešci
-                System.out.println("Nepravilan unos! Unesite dva broja odvojena razmakom.");
+            String[] numbers = line.split("\\s+"); // Split the line into parts by whitespace
+            if (numbers.length == 2) { // Check if exactly two numbers were entered
+                leftList.add(Integer.parseInt(numbers[0])); // Add the first number to the left list
+                rightList.add(Integer.parseInt(numbers[1])); // Add the second number to the right list
+            } else { // If the line does not contain exactly two numbers, display an error message
+                System.out.println("Invalid input! Please enter two numbers separated by a space.");
             }
         }
 
-        // Pretvori dinamičke liste u nizove
-        int[] levo = leviSeznam.stream().mapToInt(Integer::intValue).toArray(); // Konvertovanje liste u niz za levi popis
-        int[] desno = desniSeznam.stream().mapToInt(Integer::intValue).toArray(); // Konvertovanje liste u niz za desni popis
+        // Convert dynamic lists into arrays
+        int[] left = leftList.stream().mapToInt(Integer::intValue).toArray(); // Convert the left list to an array
+        int[] right = rightList.stream().mapToInt(Integer::intValue).toArray(); // Convert the right list to an array
 
-        // Izračun udaljenosti između popisa
-        int razdalja = izracunajRazdaljo(levo, desno); // Poziv funkcije za izračunavanje udaljenosti
+        // Calculate the distance between the two collections
+        int distance = calculateDistance(left, right); // Call the function to calculate the distance
 
-        // Ispis rezultata
-        System.out.println("Ukupna udaljenost između popisa je: " + razdalja); // Prikaz ukupne udaljenosti
+        // Print the result
+        System.out.println("The total distance between the collections is: " + distance); // Display the total distance
     }
 
-    // Funkcija za izračunavanje udaljenosti između dva popisa
-    public static int izracunajRazdaljo(int[] levo, int[] desno) {
-        Arrays.sort(levo); // Sortiranje levog popisa u rastućem redosledu
-        Arrays.sort(desno); // Sortiranje desnog popisa u rastućem redosledu
+    // Function to calculate the distance between two collections
+    public static int calculateDistance(int[] left, int[] right) {
+        Arrays.sort(left); // Sort the left collection in ascending order
+        Arrays.sort(right); // Sort the right collection in ascending order
 
-        int razdalja = 0; // Inicijalizacija varijable za čuvanje ukupne udaljenosti
-        for (int i = 0; i < levo.length; i++) { // Iteracija kroz elemente oba popisa
-            razdalja += Math.abs(levo[i] - desno[i]); // Dodavanje apsolutne razlike odgovarajućih elemenata
+        int distance = 0; // Initialize the variable to store the total distance
+        for (int i = 0; i < left.length; i++) { // Iterate through the elements of both collections
+            distance += Math.abs(left[i] - right[i]); // Add the absolute difference of corresponding elements
         }
 
-        return razdalja; // Vraćanje ukupne udaljenosti
+        return distance; // Return the total distance
     }
 }
