@@ -6,13 +6,13 @@ import java.util.List;
 
 public class BridgeRepair2 {
 
-    // Funkcija za izračun vseh možnih rezultatov s tremi operatorji (+, *, ||)
+    // Function to calculate all possible results using three operators (+, *, ||)
     public static long calculate(String equation) {
         String[] parts = equation.split(": ");
         long target = Long.parseLong(parts[0]);
         String[] numbers = parts[1].split(" ");
         
-        // Preverimo vse možne kombinacije operatorjev (+, *, ||)
+        // Check all possible combinations of operators (+, *, ||)
         List<Long> results = new ArrayList<>();
         results.add(Long.parseLong(numbers[0]));
         
@@ -21,29 +21,29 @@ public class BridgeRepair2 {
             long num = Long.parseLong(numbers[i]);
             
             for (long res : results) {
-                // Seštevanje
+                // Addition
                 newResults.add(res + num);
-                // Množenje
+                // Multiplication
                 newResults.add(res * num);
-                // Konkatenacija (||)
-                long concatenated = Long.parseLong(res + "" + num); // Združimo števili kot niza
+                // Concatenation (||)
+                long concatenated = Long.parseLong(res + "" + num); // Merge numbers as strings
                 newResults.add(concatenated);
             }
             results = newResults;
         }
         
-        // Če lahko dosežemo cilj (target), ga vrnemo; sicer vrnemo 0
+        // If the target can be achieved, return it; otherwise return 0
         return results.contains(target) ? target : 0;
     }
 
-    // Funkcija za branje vhodnih podatkov iz datoteke
+    // Function to read input data from a file
     public static long readAndProcessFile(String fileName) {
         long totalCalibrationResult = 0;
         
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             String line;
             while ((line = br.readLine()) != null) {
-                totalCalibrationResult += calculate(line); // Seštejemo vse resljive testne vrednosti
+                totalCalibrationResult += calculate(line); // Sum all solvable target values
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -53,11 +53,11 @@ public class BridgeRepair2 {
     }
 
     public static void main(String[] args) {
-        // Vhodna datoteka z enačbami
+        // Input file containing the equations
         String fileName = "brigerepair2.txt";
         
         long totalCalibrationResult = readAndProcessFile(fileName);
         
-        System.out.println("Skupni rezultat kalibracije: " + totalCalibrationResult);
+        System.out.println("Total calibration result: " + totalCalibrationResult);
     }
 }
